@@ -5,7 +5,8 @@
     function AuthGuard(): void
     {
         let protected_routes: string[] = [
-            "contact-list"
+            "contact-list", 
+            "task-list"
         ];
     
     
@@ -169,6 +170,7 @@
     function DisplayAboutPage(): void
     {
         console.log("About Page");
+        
     }
 
     /**
@@ -457,6 +459,7 @@
 
                     // redirect the user to the secure area of our site - contact-list.html
                     LoadLink("contact-list");
+
                 }
                 // else if bad credentials were entered...
                 else
@@ -529,6 +532,15 @@
       */
      function DisplayTaskList()
      {
+        $("a[data='task-list']").on("click", function()
+        {
+            if(!sessionStorage.getItem("user"))
+            {
+                router.ActiveLink = "login";
+            }
+
+        
+         AuthGuard();
          let messageArea = $("#messageArea");
          messageArea.hide();
          let taskInput = $("#taskTextInput");
@@ -580,6 +592,8 @@
                  $(this).closest("li").remove();
              }    
          });
+         
+        });
      }
 
     /**

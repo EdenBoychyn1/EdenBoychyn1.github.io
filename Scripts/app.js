@@ -3,7 +3,8 @@
 (function () {
     function AuthGuard() {
         var protected_routes = [
-            "contact-list"
+            "contact-list", 
+            "task-list"
         ];
         if (protected_routes.indexOf(router.ActiveLink) > -1) {
             // check if user is logged in
@@ -263,6 +264,8 @@
         if (sessionStorage.getItem("user")) {
             // swap out the login link for logout
             $("#login").html("<a id=\"logout\" class=\"nav-link\" href=\"#\"><i class=\"fas fa-sign-out-alt\"></i> Logout</a>");
+            $("#login").html("<li class=\"nav-item\"><a class=\"nav-link\" data=\"task-list\">Task List </a></li>").insertAfter("li.nav-item:eq(5)");
+            
             $("#logout").on("click", function () {
                 // perform logout
                 sessionStorage.clear();
@@ -274,10 +277,47 @@
             });
         }
     }
+
+    function taskListNavLink()
+    {
+        let taskListNavLink = document.createElement('a');
+        taskListNavLink.setAttribute('class', 'nav-link');
+        taskListNavLink.setAttribute('data', 'task-list');
+        taskListNavLink.textContent = 'Task List';
+
+        // Create li node and attributes
+        let liTag = document.createElement('li');
+        liTag.setAttribute('class', 'nav-item');
+
+        // Create i class design node and attributes
+        let iDesign = document.createElement('i');
+        iDesign.setAttribute('class', 'fa-solid fa-list');
+        
+        // Append i design node as child of HR Link
+        taskListNavLink.appendChild(iDesign);
+
+        // Append HR Link node as child of liTag
+        liTag.appendChild(taskListNavLink);
+
+        // Look for the ul node and append the created liTag node as a child
+        document.querySelector('ul').appendChild(liTag);
+
+        // find the ul element and store it in parent node
+        let parentNode = document.querySelector("ul");
+
+        // Get the 5th li node
+        let contactContent = document.getElementsByTagName("li")[5];
+
+        // Insert liTag before contactContent.
+        parentNode.insertBefore(liTag, contactContent);
+    }
+
     function DisplayLoginPage() {
         console.log("Login Page");
         var messageArea = $("#messageArea");
         messageArea.hide();
+        //let taskListNav = $("<li class=\"nav-item\"><a class=\"nav-link\" data=\"task-list\">Task List </a></li>").insertAfter("li.nav-item:eq(5)");
+        
         AddLinkEvents("register");
         $("#loginButton").on("click", function () {
             var success = false;
@@ -306,6 +346,10 @@
                     messageArea.removeAttr("class").hide();
                     // redirect the user to the secure area of our site - contact-list.html
                     LoadLink("contact-list");
+                    AddLinkEvents("task-list");
+                    //$("<li class=\"nav-item\"><a class=\"nav-link\" data=\"task-list\">Task List </a></li>").insertAfter("li.nav-item:eq(5)");
+                    //AddLinkEvents("task-list");
+                    //$('<li class="nav-item" id="task-list"><a class="nav-link" data="task-list"><i class="fas fa-sign-in-alt"></i> Task List</a></li>').insertAfter("li.nav-item:eq(5)");
                 }
                 // else if bad credentials were entered...
                 else {
@@ -352,6 +396,8 @@
      *
      */
     function DisplayTaskList() {
+
+        
         var messageArea = $("#messageArea");
         messageArea.hide();
         var taskInput = $("#taskTextInput");
@@ -409,9 +455,12 @@
             case "register": return DisplayRegisterPage;
             case "404": return Display404Page;
             case "task-list": return DisplayTaskList;
+
             default:
                 console.error("ERROR: callback does not exist: " + router.ActiveLink);
                 return new Function();
+        
+            
         }
     }
     // named function option
