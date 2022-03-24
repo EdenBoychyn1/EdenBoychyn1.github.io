@@ -396,6 +396,11 @@
             $("#login").html(
                 `<a id="logout" class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>`
             );
+
+
+            $("<li class=\"nav-item\"><a class=\"nav-link\" data=\"task-list\">Task List </a></li>").insertAfter("li.nav-item:eq(5)");
+            LoadLink("task-list");
+   
             
             $("#logout").on("click", function()
             {
@@ -420,7 +425,7 @@
         console.log("Login Page");
         let messageArea =  $("#messageArea");
         messageArea.hide();
-
+        AddLinkEvents("task-list");
         AddLinkEvents("register");
 
         $("#loginButton").on("click", function()
@@ -459,6 +464,7 @@
 
                     // redirect the user to the secure area of our site - contact-list.html
                     LoadLink("contact-list");
+                    $("<li class=\"nav-item\"><a class=\"nav-link\" data=\"task-list\">Task List </a></li>").insertAfter("li.nav-item:eq(5)");
 
                 }
                 // else if bad credentials were entered...
